@@ -6,10 +6,14 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Theme for Zsh
 ZSH_THEME="robbyrussell"
-
+plugins=(
+  git
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+)
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
-
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5"
 # Starship prompt
 eval "$(starship init zsh)"
 
