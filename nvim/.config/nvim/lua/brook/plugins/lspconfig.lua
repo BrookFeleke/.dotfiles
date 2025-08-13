@@ -219,8 +219,14 @@ return {
         clangd = {},
         terraform = {},
         gopls = {
+          -- Make the LSP process itself inherit GOFLAGS
+          cmd_env = { GOFLAGS = '-tags=dev' },
+
           settings = {
             gopls = {
+              -- Make gopls build with the dev tag (so it "sees" //go:build dev files)
+              buildFlags = { '-tags=dev' },
+
               gofumpt = true,
               codelenses = {
                 gc_details = false,
@@ -233,13 +239,13 @@ return {
                 vendor = true,
               },
               hints = {
-                assignvariabletypes = true,
-                compositeliteralfields = true,
-                compositeliteraltypes = true,
-                constantvalues = true,
-                functiontypeparameters = true,
-                parameternames = true,
-                rangevariabletypes = true,
+                assignVariableTypes = true, -- NOTE: camelCase in upstream, old snake may still work but use camelCase
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
               },
               analyses = {
                 nilness = true,
@@ -247,13 +253,22 @@ return {
                 unusedwrite = true,
                 useany = true,
               },
-              useplaceholders = true,
-              completeunimported = true,
+              usePlaceholders = true, -- <- was useplaceholders
+              completeUnimported = true,
               staticcheck = true,
-              directoryfilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules' },
-              semantictokens = true,
+              directoryFilters = { -- <- was directoryfilters
+                '-.git',
+                '-.vscode',
+                '-.idea',
+                '-.vscode-test',
+                '-node_modules',
+              },
+              semanticTokens = true, -- <- was semantictokens
             },
           },
+
+          -- (optional) enforce root detection (helps the “workspace module” warning)
+          root_dir = require('lspconfig.util').root_pattern('go.work', 'go.mod', '.git'),
         },
         pyright = {},
         rust_analyzer = {},
